@@ -1,0 +1,3 @@
+- Need empty SDL_config.h (since installed). In fact, need to somehow include
+  empty/dummy version into the distribution...
+

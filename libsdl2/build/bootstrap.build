@@ -1,0 +1,8 @@
+project = libsdl2
+
+using version
+using config
+using kconfig
+using test
+using install
+using dist

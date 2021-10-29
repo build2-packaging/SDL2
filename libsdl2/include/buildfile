@@ -1,0 +1,20 @@
+pub_hdrs = h{* -SDL_config} h{SDL_config}
+
+./: $pub_hdrs
+
+h{SDL_config}: in{SDL_config}
+{
+  # @@ TODO: this is just too repetitive (plus in the .in file).
+  #
+
+  default_assert_level = $kconfig.libsdl2.sdl_default_assert_level
+
+  atomic = $kconfig.libsdl2.sdl_atomic
+
+  gcc_atomics = $kconfig.libsdl2.have_gcc_atomics
+  gcc_sync_lock_test_and_set = $kconfig.libsdl2.have_gcc_sync_lock_test_and_set
+}
+
+# Install all the headers (note that SDL_config.h is public).
+#
+h{*}: install = include/

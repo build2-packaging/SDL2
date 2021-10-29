@@ -1,0 +1,6 @@
+/config.build
+/config.kconfig
+/config.kconfig.old
+/root/
+/bootstrap/
+build/

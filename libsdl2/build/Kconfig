@@ -1,0 +1,78 @@
+comment "Target system: $(TARGET_SYSTEM)"
+comment "Compiler type: $(COMPILER_TYPE)"
+comment "Compiler variant: $(COMPILER_VARIANT)"
+
+
+## Helper symbols (platforms, compilers, etc).
+##
+config USE_GCC
+        bool
+	default "$(COMPILER_TYPE)" = 'gcc'
+
+config USE_CLANG
+        bool
+	default "$(COMPILER_TYPE)" = 'clang'
+
+config EMSCRIPTEN
+        bool
+	default "$(TARGET_SYSTEM)" = 'emscripten'
+
+
+## DEFAULT_ASSERT_LEVEL
+##
+choice
+        prompt "Enable internal sanity checks"
+        default SDL_DEFAULT_ASSERT_LEVEL_AUTO
+
+config SDL_DEFAULT_ASSERT_LEVEL_AUTO
+        bool "auto"
+	help
+          Use optimization settings to determine assertion level.
+
+config SDL_DEFAULT_ASSERT_LEVEL_DISABLED
+        bool "disabled"
+
+config SDL_DEFAULT_ASSERT_LEVEL_RELEASE
+        bool "release"
+
+config SDL_DEFAULT_ASSERT_LEVEL_ENABLED
+        bool "enabled"
+
+config SDL_DEFAULT_ASSERT_LEVEL_PARANOID
+        bool "paranoid"
+
+endchoice
+
+config SDL_DEFAULT_ASSERT_LEVEL
+        int
+	default -1 if SDL_DEFAULT_ASSERT_LEVEL_AUTO
+	default  0 if SDL_DEFAULT_ASSERT_LEVEL_DISABLED
+	default  1 if SDL_DEFAULT_ASSERT_LEVEL_RELEASE
+	default  2 if SDL_DEFAULT_ASSERT_LEVEL_ENABLED
+	default  3 if SDL_DEFAULT_ASSERT_LEVEL_PARANOID
+
+## ATOMIC subsystem.
+##
+menuconfig SDL_ATOMIC
+        bool "Atomic subsystem"
+        default y
+	depends on !EMSCRIPTEN
+	help
+	  Enable the atomic operations subsystem.
+
+if SDL_ATOMIC
+
+if USE_GCC || USE_CLANG
+
+config HAVE_GCC_ATOMICS
+        bool "GCC/Clang atomics support"
+        default y
+
+config HAVE_GCC_SYNC_LOCK_TEST_AND_SET
+        bool "GCC/Clang minimum atomics support"
+        default y
+	depends on !HAVE_GCC_ATOMICS
+
+endif # USE_GCC || USE_CLANG
+
+endif # SDL_ATOMIC

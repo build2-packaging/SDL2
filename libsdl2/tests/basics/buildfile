@@ -1,0 +1,3 @@
+import libs = libsdl2%lib{sdl2}
+
+exe{driver}: {h c}{**} $libs testscript{**}
