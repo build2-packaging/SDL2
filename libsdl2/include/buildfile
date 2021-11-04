@@ -2,17 +2,28 @@ pub_hdrs = h{* -SDL_config} h{SDL_config}
 
 ./: $pub_hdrs
 
-h{SDL_config}: in{SDL_config}
+# @@ TODO: since this file is installed, we need to do the whole empty file
+#          dance (we also need to somehow distribute that empty file).
+#
+h{SDL_config}: in{SDL_config.h.cmake}
 {
-  # @@ TODO: this is just too repetitive (plus in the .in file).
+  backlink = true
+  autoconf.flavor = cmake
+
+  # Note: expose via kconfig (user configuration).
   #
+  HAVE_LIBC = true
 
-  default_assert_level = $kconfig.libsdl2.sdl_default_assert_level
+  # @@ TODO: this is just too repetitive, anything we can do?
 
-  atomic = $kconfig.libsdl2.sdl_atomic
+  SDL_DEFAULT_ASSERT_LEVEL = $kconfig.libsdl2.sdl_default_assert_level
 
-  gcc_atomics = $kconfig.libsdl2.have_gcc_atomics
-  gcc_sync_lock_test_and_set = $kconfig.libsdl2.have_gcc_sync_lock_test_and_set
+  SDL_ATOMIC = $kconfig.libsdl2.sdl_atomic
+
+  # @@ TODO: move to libbuild2-autoconf?
+  #
+  HAVE_GCC_ATOMICS = $kconfig.libsdl2.have_gcc_atomics
+  HAVE_GCC_SYNC_LOCK_TEST_AND_SET = $kconfig.libsdl2.have_gcc_sync_lock_test_and_set
 }
 
 # Install all the headers (note that SDL_config.h is public).
