@@ -8,7 +8,6 @@ pub_hdrs = h{* -SDL_config} h{SDL_config}
 h{SDL_config}: in{SDL_config.h.cmake}
 {
   backlink = true
-  autoconf.flavor = cmake
 
   # Note: expose via kconfig (user configuration).
   #
